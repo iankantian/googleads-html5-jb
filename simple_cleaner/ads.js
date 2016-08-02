@@ -15,27 +15,8 @@ function init() {
     playButton = document.getElementById('playButton');
     countdownUi = document.getElementById('countdownUi');
     playButton.addEventListener('click', requestAds);
-}
-
-function createAdDisplayContainer() {
-    // We assume the adContainer is the DOM id of the element that will house
-    // the ads.
-    adDisplayContainer =
-        new google.ima.AdDisplayContainer(
-            document.getElementById('adContainer'), videoContent);
-}
-
-function requestAds() {
-    google.ima.settings.setPlayerType('google/codepen-demo-countdown-timer');
-    google.ima.settings.setPlayerVersion('1.0.0');
-    // Create the ad display container.
     createAdDisplayContainer();
-    // Initialize the container. Must be done via a user action on mobile devices.
-    adDisplayContainer.initialize();
-    videoContent.load();
-    // Create ads loader.
-    adsLoader = new google.ima.AdsLoader(adDisplayContainer);
-    // Listen and respond to ads loaded and error events.
+    adsLoader = new google.ima.AdsLoader( adDisplayContainer );
     adsLoader.addEventListener(
         google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED,
         onAdsManagerLoaded,
@@ -44,6 +25,28 @@ function requestAds() {
         google.ima.AdErrorEvent.Type.AD_ERROR,
         onAdError,
         false);
+}
+
+function createAdDisplayContainer() {
+    // We assume the adContainer is the DOM id of the element that will house
+    // the ads.
+    adDisplayContainer = new google.ima.AdDisplayContainer( document.getElementById( 'adContainer' ), videoContent );
+    adDisplayContainer.initialize();
+}
+
+function requestAds() {
+    //google.ima.settings.setPlayerType('google/codepen-demo-countdown-timer');
+    //google.ima.settings.setPlayerVersion('1.0.0');
+    // Create the ad display container.
+    //createAdDisplayContainer();
+    // Initialize the container. Must be done via a user action on mobile devices.
+    //adDisplayContainer.initialize();
+
+    videoContent.load();
+    // Create ads loader.
+    //adsLoader = new google.ima.AdsLoader( adDisplayContainer );
+    // Listen and respond to ads loaded and error events.
+
 
     // Request video ads.
     var adsRequest = new google.ima.AdsRequest();
@@ -136,7 +139,7 @@ function onAdEvent(adEvent) {
                         countdownUi.innerHTML =
                             'Remaining Time: ' + parseInt(remainingTime);
                     },
-                    300); // every 300ms
+                    300 ); // every 300ms
             }
             break;
         case google.ima.AdEvent.Type.COMPLETE:
