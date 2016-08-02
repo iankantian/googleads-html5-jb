@@ -221,6 +221,8 @@ Application.prototype.makeAdsFullscreen_ = function () {
 
 Application.prototype.onContentEnded_ = function () {
     this.ads_.contentEnded();
+    this.playing_ = false;
+    this.updateChrome_();
 };
 
 

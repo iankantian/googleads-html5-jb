@@ -8,20 +8,20 @@
     <script type="text/javascript" src="ads.js"></script>
     <script type="text/javascript" src="video_player.js"></script>
 
-    <!-- GPT Companion Code -->
-    <!-- Initialize the tagging library -->
-    <!--<script type='text/javascript'>-->
-        <!--var googletag = googletag || {};-->
-        <!--googletag.cmd = googletag.cmd || [];-->
-        <!--(function () {-->
-            <!--var gads = document.createElement('script');-->
-            <!--gads.async = true;-->
-            <!--gads.type = 'text/javascript';-->
-            <!--gads.src = '//www.googletagservices.com/tag/js/gpt.js';-->
-            <!--var node = document.getElementsByTagName('script')[0];-->
-            <!--node.parentNode.insertBefore(gads, node);-->
-        <!--})();-->
-    <!--</script>-->
+     <!--GPT Companion Code-->
+     <!--Initialize the tagging library-->
+    <script type='text/javascript'>
+        var googletag = googletag || {};
+        googletag.cmd = googletag.cmd || [];
+        (function () {
+            var gads = document.createElement('script');
+            gads.async = true;
+            gads.type = 'text/javascript';
+            gads.src = '//www.googletagservices.com/tag/js/gpt.js';
+            var node = document.getElementsByTagName('script')[0];
+            node.parentNode.insertBefore(gads, node);
+        })();
+    </script>
 
     <!-- Register your companion slots -->
     <script type='text/javascript'>
@@ -49,8 +49,8 @@
 
     <div id="videoplayer">
         <video id="content" muted>
-            <source src="http://rmcdn.2mdn.net/Demo/vast_inspector/android.mp4"></source>
-            <source src="http://rmcdn.2mdn.net/Demo/vast_inspector/android.webm"></source>
+            <source src="http://techslides.com/demos/sample-videos/small.mp4"></source>
+            <source src="http://techslides.com/demos/sample-videos/small.webm"></source>
         </video>
         <div id="adcontainer">
         </div>

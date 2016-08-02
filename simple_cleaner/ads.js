@@ -8,6 +8,7 @@ var adDisplayContainer;
 var intervalTimer;
 var playButton;
 var videoContent;
+var adsRequest;
 var countdownUi;
 
 function init() {
@@ -25,6 +26,7 @@ function init() {
         google.ima.AdErrorEvent.Type.AD_ERROR,
         onAdError,
         false);
+    videoContent.load();
 }
 
 function createAdDisplayContainer() {
@@ -35,21 +37,13 @@ function createAdDisplayContainer() {
 }
 
 function requestAds() {
-    //google.ima.settings.setPlayerType('google/codepen-demo-countdown-timer');
-    //google.ima.settings.setPlayerVersion('1.0.0');
-    // Create the ad display container.
-    //createAdDisplayContainer();
-    // Initialize the container. Must be done via a user action on mobile devices.
-    //adDisplayContainer.initialize();
 
-    videoContent.load();
     // Create ads loader.
     //adsLoader = new google.ima.AdsLoader( adDisplayContainer );
     // Listen and respond to ads loaded and error events.
 
-
+    adsRequest = new google.ima.AdsRequest();
     // Request video ads.
-    var adsRequest = new google.ima.AdsRequest();
     adsRequest.adTagUrl =
         'https://pubads.g.doubleclick.net/gampad/ads?' +
         'sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&' +
@@ -63,6 +57,7 @@ function requestAds() {
 
     adsRequest.nonLinearAdSlotWidth = 640;
     adsRequest.nonLinearAdSlotHeight = 150;
+
 
     adsLoader.requestAds(adsRequest);
 }
