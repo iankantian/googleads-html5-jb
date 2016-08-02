@@ -5,60 +5,23 @@ defined a div with the id "adContainer". This div is set up to render on top of 
 tell the SDK to render ads in that div. Also provide a handle to your content video player - the SDK will poll the
 current time of your player to properly place mid-rolls. After you create the ad display container, initialize it. On
 mobile devices, this initialization must be done as the result of a user action.
-For mobile a touch-start mechanism will have to be employed
+For mobile a touch-start mechanism will have to be employed for pre-roll and autoplay.
 */
-var videoContent = document.getElementById( 'contentElement' );
+var videoContent = document.getElementById( 'contentElement' ); // use the id of the video tag
 var adDisplayContainer = new google.ima.AdDisplayContainer( document.getElementById( 'adContainer' ), videoContent );
-// Must be done as the result of a user action on mobile
-// However, I'll be darned if I can find out what doesn't work when you don't initialize it...
+
+// Initialize must be done as the result of a user action on mobile
 adDisplayContainer.initialize();
 
 /*
  Request ads
-Create an AdsLoader and define some event listeners. Then create an AdsRequest object to pass to this AdsLoader. The
-event listener for the ADS_MANAGER_LOADED event doesn't exist yet - that will be created later. We also use a sample
-test ad tag - to find out how to serve ads of your own, check out this DFP help center article. We'll then wire up the
-'Play' button to call our requestAds function.
+Create an AdsLoader and define some event listeners. Then create an AdsRequest object to pass to this AdsLoader.We also
+use a sample test ad tag - to find out how to serve ads of your own, check out this DFP help center article. We'll then
+ wire up the 'Play' button to call our requestAds function.
  Re-use this AdsLoader instance for the entire lifecycle of your page.
 Feed it our instance target object
  */
 var adsLoader = new google.ima.AdsLoader( adDisplayContainer );
-
-// Add event listeners
-adsLoader.addEventListener( google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false );
-adsLoader.addEventListener( google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false );
-
-function onAdError(adErrorEvent) {
-    // Handle the error logging and destroy the AdsManager
-    console.log(adErrorEvent.getError());
-    adsManager.destroy();
-}
-
-// An event listener to tell the SDK that our content video is completed so the SDK can play any post-roll ads.
-var contentEndedListener = function() {
-    adsLoader.contentComplete();
-};
-videoContent.onended = contentEndedListener;
-
-// Request video ads.
-var adsRequest = new google.ima.AdsRequest();
-adsRequest.adTagUrl = 'https://pubads.g.doubleclick.net/gampad/ads?' +
-    'sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&' +
-    'impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&' +
-    'cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=';
-
-// Specify the linear and nonlinear slot sizes. This helps the SDK to
-// select the correct creative if multiple are returned.
-adsRequest.linearAdSlotWidth = 640;
-adsRequest.linearAdSlotHeight = 400;
-adsRequest.nonLinearAdSlotWidth = 640;
-adsRequest.nonLinearAdSlotHeight = 150;
-
-function requestAds() {
-    adsLoader.requestAds( adsRequest );
-}
-var playButton = document.getElementById( 'playButton' );
-playButton.addEventListener( 'click', requestAds );
 
 /*
  Getting the AdsManager and Display Ads
@@ -97,4 +60,43 @@ function onAdsManagerLoaded( adsManagerLoadedEvent ) {
         // An error may be thrown if there was a problem with the VAST response.
     }
 }
+
+// Add event listeners
+// looks like adsLoader is what emits the events related to the ads failing, etc...
+adsLoader.addEventListener( google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, onAdsManagerLoaded, false );
+adsLoader.addEventListener( google.ima.AdErrorEvent.Type.AD_ERROR, onAdError, false );
+
+function onAdError(adErrorEvent) {
+    // Handle the error logging and destroy the AdsManager
+    console.log(adErrorEvent.getError());
+    adsManager.destroy();
+}
+
+// An event listener to tell the SDK that our content video is completed so the SDK can play any post-roll ads.
+var contentEndedListener = function() {
+    adsLoader.contentComplete();
+};
+videoContent.onended = contentEndedListener;
+
+// Request video ads.
+var adsRequest = new google.ima.AdsRequest();
+adsRequest.adTagUrl = 'https://pubads.g.doubleclick.net/gampad/ads?' +
+    'sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&' +
+    'impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&' +
+    'cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=';
+
+// Specify the linear and nonlinear slot sizes. This helps the SDK to
+// select the correct creative if multiple are returned.
+adsRequest.linearAdSlotWidth = 640;
+adsRequest.linearAdSlotHeight = 400;
+adsRequest.nonLinearAdSlotWidth = 640;
+adsRequest.nonLinearAdSlotHeight = 150;
+
+function requestAds() {
+    adsLoader.requestAds( adsRequest );
+}
+var playButton = document.getElementById( 'playButton' );
+playButton.addEventListener( 'click', requestAds );
+
+
 

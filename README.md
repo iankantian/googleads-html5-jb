@@ -4,6 +4,7 @@ Google Ads HTML5 IMA SDK Modified by Josh Brown 2016
 This project hosts samples for the [HTML5 IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/v3/), but is modified to study the MVP for google HTML5 sdk.
 
 ### Samples Breakdown
+  * [Simple_2Clea](https://github.com/iankantian/googleads-html5-jb/tree/master/simple_2) - Modified for exploration verstion of the Simple below
   * [Simple_2](https://github.com/iankantian/googleads-html5-jb/tree/master/simple_2) - Modified for exploration verstion of the Simple below
   * [Simple](https://github.com/googleads/googleads-ima-html5/tree/master/simple) - the bare minimum required for an IMA integration
   * [Advanced](https://github.com/googleads/googleads-ima-html5/tree/master/advanced) - IMA integration with more advanced UI including event logging, play/pause, and fullscreen, and companion ads
