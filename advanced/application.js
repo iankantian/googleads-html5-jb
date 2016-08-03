@@ -226,7 +226,7 @@ Application.prototype.onContentEnded_ = function () {
 };
 
 
-var origOpen = da_funk; // the original function you need a wrapper for da_funk
+var origOpen = da_funk; // the original function you need a wrapper for: da_funk
 // use same name in this declaration.
 da_funk = function (method, url) {
     // copy arguments

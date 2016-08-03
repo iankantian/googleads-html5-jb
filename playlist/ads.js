@@ -6,7 +6,7 @@
 /**
  * Shows how to use the IMA SDK to request and display ads.
  */
-var Ads = function(application, videoPlayer) {
+var Ads = function( application, videoPlayer ) {
   this.application_ = application;
   this.videoPlayer_ = videoPlayer;
   this.customClickDiv_ = document.getElementById('customClick');
