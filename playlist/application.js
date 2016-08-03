@@ -56,6 +56,7 @@ var Application = function () {
     this.fullscreen = false;
 
     this.videoPlayer_ = new VideoPlayer();
+    this.nextVideo_ = this.videoPlayer_.nextVideo_.bind( this.videoPlayer_ ) ;
     this.ads_ = new Ads(this, this.videoPlayer_);
     this.adTagUrl_ = 'https://pubads.g.doubleclick.net/' +
         'gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&' +
@@ -68,7 +69,20 @@ var Application = function () {
 
 };
 
+Application.prototype.bind_ = function (thisObj, fn) {
+    return function () {
+        fn.apply(thisObj, arguments);
+    };
+};
+
+Application.prototype.loadAds_ = function () {
+    this.log('loadAds_');
+    this.videoPlayer_.removePreloadListener();
+    this.ads_.requestAds(this.adTagUrl_);
+};
+
 Application.prototype.setVideoEndedCallbackEnabled = function (enable) {
+    this.log('setVideoEndedCallbackEnabled');
     if (enable) {
         this.videoPlayer_.registerVideoEndedCallback(this.videoEndedCallback_);
     } else {
@@ -81,38 +95,41 @@ Application.prototype.switchButtonToReplay = function () {
     this.replayButton_.style.display = 'block';
 };
 
+Application.prototype.switchButtonToPlay_ = function () {
+    this.replayButton_.style.display = 'none';
+    this.playButton_.style.display = 'block';
+};
+
 Application.prototype.log = function (message) {
     console.log(message);
     this.console_.innerHTML = this.console_.innerHTML + '<br/>' + message;
 };
 
 Application.prototype.resumeAfterAd = function () {
+    this.log('resumeAfterAd');
     this.videoPlayer_.play();
     this.adsActive_ = false;
     this.updateChrome_();
 };
 
 Application.prototype.pauseForAd = function () {
+    this.log('pauseForAd');
     this.adsActive_ = true;
     this.playing_ = true;
     this.videoPlayer_.pause();
     this.updateChrome_();
 };
 
+// this is odd: this.playing is changed to false, but the ad keeps going!
 Application.prototype.adClicked = function () {
+    this.log('adClicked');
     this.playing_ = false;
     this.updateChrome_();
 };
 
-Application.prototype.bind_ = function (thisObj, fn) {
-    return function () {
-        fn.apply(thisObj, arguments);
-    };
-};
-
 Application.prototype.onClick_ = function () {
+    this.log('onClick_');
     if (!this.adsDone_) {
-
         if (!this.initialUserActionHappened_) {
             // The user clicked/tapped - inform the ads controller that this code
             // is being run in a user action thread.
@@ -149,14 +166,10 @@ Application.prototype.onClick_ = function () {
 };
 
 Application.prototype.onReplay_ = function () {
+    this.log('onReplay_');
     this.switchButtonToPlay_();
     this.videoPlayer_.preloadContent(this.bind_(this, this.loadAds_));
     this.adsDone_ = true;
-};
-
-Application.prototype.switchButtonToPlay_ = function () {
-    this.replayButton_.style.display = 'none';
-    this.playButton_.style.display = 'block';
 };
 
 Application.prototype.onFullscreenClick_ = function () {
@@ -193,17 +206,13 @@ Application.prototype.onFullscreenClick_ = function () {
 };
 
 Application.prototype.updateChrome_ = function () {
+    this.log('updateChrome_');
     if (this.playing_) {
         this.playButton_.textContent = 'II';
     } else {
         // Unicode play symbol.
         this.playButton_.textContent = String.fromCharCode(9654);
     }
-};
-
-Application.prototype.loadAds_ = function () {
-    this.videoPlayer_.removePreloadListener();
-    this.ads_.requestAds(this.adTagUrl_);
 };
 
 Application.prototype.onFullscreenChange_ = function () {
@@ -240,12 +249,14 @@ Application.prototype.makeAdsFullscreen_ = function () {
 };
 
 Application.prototype.onContentEnded_ = function () {
+    this.log('onContentEnded_');
     this.ads_.contentEnded();
 };
 
 Application.prototype.onPlaylistItemClick_ = function (event) {
     // Terms of Service says we can't kill an ad prematurely, so we will only
     // switch videos if there isn't an ad playing.
+    this.log('onPlaylistItemClick_');
     if (!this.ads_.linearAdPlaying) {
         this.ads_.destroyAdsManager();
         this.ads_.contentCompleted();
